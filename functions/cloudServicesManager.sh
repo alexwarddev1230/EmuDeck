@@ -146,6 +146,14 @@ manageRPSMenu() {
 		arrAllRP+=(false "Parsec")
 	fi
 
+	XBPlay_IsInstalled
+	ans=$?
+	if [ "$ans" == "1" ]; then
+		arrAllRP+=(true "XBPlay")
+	else
+		arrAllRP+=(false "XBPlay")
+	fi
+
 	# Dynamically build list of scripts
 	RP=$(zenity --list  \
 	--title="Cloud Services Manager" \
@@ -187,6 +195,14 @@ manageRPSMenu() {
 				else
 					Parsec_install
 				fi
+			elif [ "$i" == "XBPlay" ]; then
+				XBPlay_IsInstalled
+				ans=$?
+				if [ "$ans" == "1" ]; then
+					XBPlay_update
+				else
+					XBPlay_install
+				fi
 			fi
 		done
 
@@ -199,6 +215,9 @@ manageRPSMenu() {
 		fi
 		if [[ ! "${arrChosen[*]}" =~ "Parsec" ]]; then
 			Parsec_uninstall
+		fi
+		if [[ ! "${arrChosen[*]}" =~ "XBPlay" ]]; then
+			XBPlay_uninstall
 		fi
 	)	|	zenity --progress \
             --title="Cloud Services Manager" \
